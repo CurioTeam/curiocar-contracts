@@ -1,3 +1,5 @@
+// TODO: Add init script after migrate contracts
+
 const util = require('./utils/util');
 
 const init = async function (accounts) {

@@ -1,7 +1,5 @@
 require("babel-polyfill");
 
-const SolidityEvent = require('web3/lib/web3/event.js');
-
 // this web3 is injected:
 web3.BigNumber.config({ EXPONENTIAL_AT: 100 });
 
@@ -87,13 +85,6 @@ const measureGas = async accounts => {
   }
 };
 
-const decodeLogs = function (logs, contract, address) {
-  return logs.map(log => {
-    const event = new SolidityEvent(null, contract.events[log.topics[0]], address);
-    return event.decode(log);
-  })
-};
-
 module.exports = {
   forwardEVMTime,
   expectThrow,
@@ -102,6 +93,5 @@ module.exports = {
   getBalance,
   getGasPrice,
   sleep: ms => new Promise(resolve => setTimeout(resolve, ms)),
-  measureGas,
-  decodeLogs
+  measureGas
 };
