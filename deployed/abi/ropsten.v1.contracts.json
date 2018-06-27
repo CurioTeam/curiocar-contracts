@@ -1,0 +1,10 @@
+{
+  "network": "ropsten",
+  "version": "1",
+  "core": {
+    "address": ""
+  },
+  "auction": {
+    "address": ""
+  }
+}
