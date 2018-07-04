@@ -4,6 +4,7 @@
   "description": "Smart-contracts for NFT cars",
   "author": "Vladimir Sushkov <volodya.sushkov@gmail.com>",
   "scripts": {
+    "data:tokens:list": "node scripts/data/validate.js",
     "compile": "truffle compile",
     "develop": "truffle develop",
     "develop:log": "truffle develop --log",

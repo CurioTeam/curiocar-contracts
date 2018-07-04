@@ -8,3 +8,6 @@ npm-debug.log*
 
 ### Truffle
 /build
+
+### Deploy
+scripts/data/sell_tokens.json
