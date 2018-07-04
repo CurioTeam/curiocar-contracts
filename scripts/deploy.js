@@ -37,7 +37,7 @@ const deploy = async function (tokensType, startId, endId) {
 
     console.log(params);
 
-    let tx = await core.createReleaseCardAuction(
+    let tx = await core.createReleaseTokenAuction(
       params.name,
       params.start,
       params.end,
