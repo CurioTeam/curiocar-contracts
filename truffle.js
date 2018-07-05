@@ -7,6 +7,7 @@ module.exports = {
       host: 'localhost',
       port: 8545,
       network_id: '*',
+      gasPrice: '100000000000'
     },
     ropstenInfura: {
       provider: function() {
