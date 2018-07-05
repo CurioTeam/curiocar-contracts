@@ -32,7 +32,29 @@ Set admin account, link and unpause them. Configuration in init.js script.
 truffle exec scripts/init.js --network <netName>
 ```
 #### 4. Deploy tokens
-Will be add in future.
+Mint tokens.
+```
+truffle exec scripts/deploy.js --type <tokensType> --start <startId> --end <endId> --network <netName>
+```
+##### tokensTypes
+```json
+[
+  "sell"
+]
+```
+##### startId, endId
+```json
+{
+  "startId": 
+  {
+    "type": "Positive number"
+  },
+  "endId":
+  {
+     "type": "Positive number"
+   }
+}
+```
 ## Addition
 #### Geth node start
 ```
