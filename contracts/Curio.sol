@@ -87,8 +87,7 @@ contract Curio is ERC721 {
   CurioAuction public auction;
 
   // Restriction on release of tokens
-  // 50 cars with 9 items
-  uint256 public constant TOTAL_SUPPLY_LIMIT = 450;
+  uint256 public constant TOTAL_SUPPLY_LIMIT = 900;
 
   // Count of released tokens
   uint256 public releaseCreatedCount;

@@ -309,8 +309,8 @@ contract("Curio", function(accounts) {
     });
 
 
-    it("should be able to create only 450 tokens", async function() {
-      for(let i = 0; i < 450; i++){
+    it("should be able to create only 900 tokens", async function() {
+      for(let i = 0; i < 900; i++){
         await coreC.createFreeToken(`free token #${ i }`, user1, { from: admin });
 
         const tokenOwner = await coreC.ownerOf(i);
@@ -320,7 +320,7 @@ contract("Curio", function(accounts) {
         eq(token, `free token #${ i }`);
       }
 
-      await util.expectThrow(coreC.createFreeToken("free token ID 450", user1, { from: admin }));
+      await util.expectThrow(coreC.createFreeToken("free token ID 900", user1, { from: admin }));
     });
   });
 
