@@ -26,10 +26,12 @@ contract("CurioAuction", function(accounts) {
   // Deployed contract instances
   let auction, nft;
 
+  const auctionPriceLimit ='6000000000000000000';
+
   // Deploys contracts and creates an NFT for owner/user1
   const deploy = async function(cut = 0) {
     nft = await NonFungibleMock.new({ from: owner });
-    auction = await CurioAuction.new(nft.address, cut, { from: owner });
+    auction = await CurioAuction.new(nft.address, cut, auctionPriceLimit, { from: owner });
 
     await nft.setAuctionAddress(auction.address, { from: owner });
 
@@ -43,13 +45,15 @@ contract("CurioAuction", function(accounts) {
   describe("Initial State", function() {
     beforeEach(deploy);
 
-    it("should start with owner, NFT address set and auction address set", async function() {
+    it("should start with owner, NFT address, price limit,  set and auction address set", async function() {
       const ownerAddr = await auction.owner();
       const nftAddr = await auction.tokenContract();
       const auctionAddr = await nft.auction();
+      const priceLimit = await auction.auctionPriceLimit();
       eq(ownerAddr, owner);
       eq(nftAddr, nft.address);
       eq(auctionAddr, auction.address);
+      eq(priceLimit, auctionPriceLimit);
     });
   });
 
@@ -59,6 +63,18 @@ contract("CurioAuction", function(accounts) {
     it("should fail to create auction for NFT you don't own", async function() {
       await util.expectThrow(
         nft.createAuction(tokenId1, 100, 200, 60, { from: user1 })
+      );
+    });
+
+    it("should fail to create auction for start price greater then price limit", async function() {
+      await util.expectThrow(
+        nft.createAuction(tokenId1, auctionPriceLimit, 200, 60, { from: owner })
+      );
+    });
+
+    it("should fail to create auction for end price greater then price limit", async function() {
+      await util.expectThrow(
+        nft.createAuction(tokenId1, 100, auctionPriceLimit, 60, { from: owner })
       );
     });
 
@@ -88,7 +104,7 @@ contract("CurioAuction", function(accounts) {
     });
 
     it("should be able to create auction", async function() {
-      await nft.createAuction(tokenId1, 100, 200, 60, { from: owner });
+      await nft.createAuction(tokenId1, '5999999999999999999', 200, 60, { from: owner });
 
       // Auction info should be correct
       const [
@@ -100,7 +116,7 @@ contract("CurioAuction", function(accounts) {
       ] = await auction.getAuction(tokenId1);
 
       eq(seller, owner);
-      assert(startingPrice.eq(100));
+      assert(startingPrice.eq('5999999999999999999'));
       assert(endingPrice.eq(200));
       assert(duration.eq(60));
     });
@@ -317,7 +333,7 @@ contract("CurioAuction", function(accounts) {
 
     before(async function() {
       nft = await NonFungibleMock.new({ from: owner });
-      auction = await CurioAuctionTest.new(nft.address, 0, { from: owner });
+      auction = await CurioAuctionTest.new(nft.address, 0, auctionPriceLimit,{ from: owner });
 
       await nft.setAuctionAddress(auction.address, { from: owner });
 

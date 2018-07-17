@@ -155,14 +155,19 @@ contract CurioAuction is Pausable {
   // Count of release tokens sold by auction
   uint256 public releaseTokensSaleCount;
 
+  // Limit of start and end prices in wei
+  uint256 public auctionPriceLimit;
+
   /**
    * @dev Constructor function
    * @param _tokenAddress Address of ERC721 token contract (Curio core contract)
    * @param _fee Percent of fee (0-10,000)
+   * @param _auctionPriceLimit Limit of start and end price in auction (in wei)
    */
   constructor(
     address _tokenAddress,
-    uint256 _fee
+    uint256 _fee,
+    uint256 _auctionPriceLimit
   )
     public
   {
@@ -173,6 +178,9 @@ contract CurioAuction is Pausable {
     require(candidateContract.implementsERC721());
 
     tokenContract = candidateContract;
+
+    require(_auctionPriceLimit == uint256(uint128(_auctionPriceLimit)));
+    auctionPriceLimit = _auctionPriceLimit;
   }
 
 
@@ -199,9 +207,13 @@ contract CurioAuction is Pausable {
     whenNotPaused
     external
   {
-    // Overflow input check
+    // Overflow and limitation input check
     require(_startingPrice == uint256(uint128(_startingPrice)));
+    require(_startingPrice < auctionPriceLimit);
+
     require(_endingPrice == uint256(uint128(_endingPrice)));
+    require(_endingPrice < auctionPriceLimit);
+
     require(_duration == uint256(uint64(_duration)));
 
     // Check call from token contract
@@ -324,6 +336,23 @@ contract CurioAuction is Pausable {
     // Send Ether on this contract to token contract
     // Boolean method make sure that even if one fails it will still work
     bool res = tokenAddress.send(address(this).balance);
+  }
+
+  /**
+   * @dev Set new auction price limit.
+   * @param _newAuctionPriceLimit Start and end price limit
+   */
+  function setAuctionPriceLimit(uint256 _newAuctionPriceLimit) external {
+    address tokenAddress = address(tokenContract);
+
+    // Check sender as owner or token contract
+    require(msg.sender == owner || msg.sender == tokenAddress);
+
+    // Check overflow
+    require(_newAuctionPriceLimit == uint256(uint128(_newAuctionPriceLimit)));
+
+    // Set new auction price limit
+    auctionPriceLimit = _newAuctionPriceLimit;
   }
 
 

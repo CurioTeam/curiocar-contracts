@@ -32,6 +32,7 @@ contract ERC721 {
 interface CurioAuction {
   function isCurioAuction() external returns (bool);
   function withdrawBalance() external;
+  function setAuctionPriceLimit(uint256 _newAuctionPriceLimit) external;
   function createAuction(
     uint256 _tokenId,
     uint256 _startingPrice,
@@ -227,6 +228,14 @@ contract Curio is ERC721 {
     require(_newAdmin != address(0));
 
     adminAddress = _newAdmin;
+  }
+
+  /**
+   * @dev Set new auction price limit.
+   * @param _newAuctionPriceLimit Start and end price limit
+   */
+  function setAuctionPriceLimit(uint256 _newAuctionPriceLimit) onlyOwnerOrAdmin external {
+    auction.setAuctionPriceLimit(_newAuctionPriceLimit);
   }
 
   /**

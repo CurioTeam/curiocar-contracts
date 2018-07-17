@@ -24,6 +24,8 @@ contract("Curio", function(accounts) {
   const logEvents = [];
   const pastEvents = [];
 
+  const auctionPriceLimit = '6000000000000000000';
+
   async function deployContract() {
     debug("deploying contract");
 
@@ -32,7 +34,7 @@ contract("Curio", function(accounts) {
     // set original owner
     await coreC.setOwner(owner);
 
-    const auctionContract = await CurioAuction.new(coreC.address, 100);
+    const auctionContract = await CurioAuction.new(coreC.address, 100, auctionPriceLimit);
     await coreC.setAuctionAddress(auctionContract.address, { from: owner });
 
     await coreC.unpause({ from: owner });
@@ -216,6 +218,43 @@ contract("Curio", function(accounts) {
     });
   });
 
+
+  describe("Auction price limitation", async function() {
+    let core, auction;
+
+    before(async function() {
+      core = await Curio.new();
+
+      // set original owner
+      await core.setOwner(owner);
+
+      auction = await CurioAuction.new(core.address, 100, auctionPriceLimit);
+      await core.setAuctionAddress(auction.address, { from: owner });
+
+      await core.unpause({ from: owner });
+    });
+
+    it("owner should be able to set price limit", async function() {
+      await core.setAuctionPriceLimit('7000000000000000000', { from: owner });
+
+      const limit = await auction.auctionPriceLimit();
+      eq(limit.toString(), '7000000000000000000');
+    });
+
+    it("admin should be able to set price limit", async function() {
+      await core.setAuctionPriceLimit('8000000000000000000', { from: admin });
+
+      const limit = await auction.auctionPriceLimit();
+      eq(limit.toString(), '8000000000000000000');
+    });
+
+    it("not-owner or admin should fall to set price limit", async function() {
+      await util.expectThrow(core.setAuctionPriceLimit('9000000000000000000', { from: user1 }));
+    });
+
+
+  });
+
   describe("Auction wrapper", async function() {
     let auction;
 
@@ -226,7 +265,7 @@ contract("Curio", function(accounts) {
     before(async function() {
       await deployContract();
 
-      auction = await CurioAuction.new(coreC.address, 0);
+      auction = await CurioAuction.new(coreC.address, 0, auctionPriceLimit);
 
       await coreC.mintTokens("test", 3, { from: admin });
       await coreC.transfer(user1, tokenId2, { from: admin });
@@ -333,7 +372,7 @@ contract("Curio", function(accounts) {
     before(async function() {
       await deployContract();
 
-      auction = await CurioAuction.new(coreC.address, 0);
+      auction = await CurioAuction.new(coreC.address, 0, auctionPriceLimit);
 
       await coreC.setAuctionAddress(auction.address, { from: owner });
     });
@@ -369,7 +408,7 @@ contract("Curio", function(accounts) {
     beforeEach(async function() {
       await deployContract();
 
-      auction = await CurioAuction.new(coreC.address, 1000);
+      auction = await CurioAuction.new(coreC.address, 1000, auctionPriceLimit);
 
       await coreC.setAuctionAddress(auction.address, { from: owner });
 

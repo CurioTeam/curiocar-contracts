@@ -11,11 +11,13 @@ import "./../CurioAuction.sol";
 contract CurioAuctionTest is CurioAuction {
   constructor(
     address _tokenAddress,
-    uint256 _fee
+    uint256 _fee,
+    uint256 _auctionPriceLimit
   ) public
     CurioAuction(
       _tokenAddress,
-        _fee
+      _fee,
+      _auctionPriceLimit
     )
   {
 
