@@ -252,7 +252,22 @@ contract("Curio", function(accounts) {
       await util.expectThrow(core.setAuctionPriceLimit('9000000000000000000', { from: user1 }));
     });
 
+    it("not-owner should fall to set price limit - call auction contract", async function() {
+      await util.expectThrow(auction.setAuctionPriceLimit('10000000000000000000', { from: user1 }));
+    });
 
+    it("not-owner auction owner should fall to set price limit - call auction contract", async function() {
+      // In this case: owner - only auction owner, admin - core admin and auction owner
+      await util.expectThrow(auction.setAuctionPriceLimit('11000000000000000000', { from: owner }));
+    });
+
+    it("auction owner should be able to set price limit - call auction contract", async function() {
+      // In this case: owner - only auction owner, admin - core admin and auction owner
+      await auction.setAuctionPriceLimit('12000000000000000000', { from: admin });
+
+      const limit = await auction.auctionPriceLimit();
+      eq(limit.toString(), '12000000000000000000');
+    });
   });
 
   describe("Auction wrapper", async function() {
