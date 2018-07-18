@@ -1,5 +1,7 @@
 # Smart-contracts for NFT cars
-With using [Truffle framework](http://truffleframework.com/). 
+With using [Truffle framework](http://truffleframework.com/).  
+!!! Tokenomic description (parts prices calculator) !!!:
+https://docs.google.com/spreadsheets/d/1v4RiG76aAkV3IVgbQHOW2Gg05lEYNHByRHxta73anxw/edit?usp=sharing
 ## Install
 ```
 $ npm i -g truffle
