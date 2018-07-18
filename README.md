@@ -36,13 +36,13 @@ Mint tokens.
 ```
 truffle exec scripts/deploy.js --type <tokensType> --start <startId> --end <endId> --network <netName>
 ```
-##### tokensTypes
+##### tokensTypes - (cars id from 1 to 50). Without --type deploy all tokens.
 ```json
 [
-  "sell"
+  "1", ... ,"50"
 ]
 ```
-##### startId, endId
+##### startId, endId (part number in car *_tokens.json file, from 0 to 17). Without --start/--end deploy all tokens.
 ```json
 {
   "startId": 
@@ -58,6 +58,6 @@ truffle exec scripts/deploy.js --type <tokensType> --start <startId> --end <endI
 ## Addition
 #### Geth node start
 ```
-geth --testnet --syncmode "light" --rpc --rpcport 7545 --rpccorsdomain "*" --rpcvhosts "*" --maxpeers 300
+geth --testnet --syncmode "light" --rpc --rpcport 7545 --rpccorsdomain "*" --rpcvhosts "*" --maxpendpeers 30
 ```
 For Mainnet: remove ```--testnet``` flag

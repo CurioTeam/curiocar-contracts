@@ -64,7 +64,7 @@ module.exports = function () {
         start = argv.hasOwnProperty('start') ? parseInt(argv.start) : null,
         end = argv.hasOwnProperty('end') ? parseInt(argv.end) : null;
 
-    if (type !== null && !tokenTypes.includes(type)) {
+    if (type !== null && !tokenTypes.includes(type.toString())) {
       console.log('Incorrect param -type!');
       console.log('Must be one of this:');
       console.log(tokenTypes);
