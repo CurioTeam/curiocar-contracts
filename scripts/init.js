@@ -1,3 +1,4 @@
+const utils = require("./utils.js");
 const CurioAuction = artifacts.require("./CurioAuction.sol"),
       Curio = artifacts.require("./Curio.sol");
 
@@ -28,6 +29,11 @@ const init = async function (accounts) {
 
   let coreAdmin = await core.adminAddress();
   console.log("Core admin address: " + coreAdmin);
+
+
+  // !!! delay 15 s (for error in nonce - mainnet infura) !!!
+  await utils.sleep(15000);
+
 
   console.log("Unpausing core contract..");
   await core.unpause({ from: ownerAccount });
