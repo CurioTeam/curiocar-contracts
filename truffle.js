@@ -1,4 +1,5 @@
 const HDWalletProvider = require('truffle-hdwallet-provider');
+const NonceTrackerSubprovider = require("web3-provider-engine/subproviders/nonce-tracker");
 const config = require('./config/env');
 
 module.exports = {
@@ -21,9 +22,17 @@ module.exports = {
     },
     mainnetInfura: {
       provider: function() {
-        return new HDWalletProvider(
+        let wallet = new HDWalletProvider(
           config.get('mainnetMnemonic'),
           `https://mainnet.infura.io/${ config.get('infuraApiKey') }`, 0, 10);
+
+        let nonceTracker = new NonceTrackerSubprovider();
+
+        wallet.engine._providers.unshift(nonceTracker);
+
+        nonceTracker.setEngine(wallet.engine);
+
+        return wallet;
       },
       network_id: 1,
       gas: config.get('mainnetGasLimit'),
