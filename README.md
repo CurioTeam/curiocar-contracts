@@ -1,7 +1,6 @@
-# Smart-contracts for NFT cars
-With using [Truffle framework](http://truffleframework.com/).  
-!!! Tokenomic description (parts prices calculator) !!!:
-https://docs.google.com/spreadsheets/d/1v4RiG76aAkV3IVgbQHOW2Gg05lEYNHByRHxta73anxw/edit?usp=sharing
+# Smart-contracts of Curiocar project
+### ERC-721 Non-Fungible Tokens represent parts of cars.
+With using [Truffle framework](http://truffleframework.com/). Powered by [Ethereum](https://ethereum.org/).
 ## Install
 ```
 $ npm i -g truffle
